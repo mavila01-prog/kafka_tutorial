@@ -5,9 +5,9 @@ dist
 tmp
 out-tsc
 
-kafka1
-kafka2
-kafka3
+kafka1/
+kafka2/
+kafka3/
 
 # dependencies
 node_modules
@@ -44,5 +44,3 @@ Thumbs.db
 
 .nx/cache
 .nx/workspace-data
-
-
