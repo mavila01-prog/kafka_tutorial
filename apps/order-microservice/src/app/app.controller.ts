@@ -1,5 +1,5 @@
-import { Controller, Get, Logger } from '@nestjs/common';
-import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { Controller, Get, Inject, Logger } from '@nestjs/common';
+import { ClientKafka, EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 import { AppService } from './app.service';
 import { CreateOrderDto, KafkaTopics, OrderResponseDto } from '@kafka-tutorial/shared';
 
@@ -8,7 +8,8 @@ export class AppController {
   private readonly logger = new Logger(AppController.name);
   
   constructor(
-    private readonly appService: AppService
+    private readonly appService: AppService,
+    @Inject('KAFKA_SERVICE') private readonly kafkaService: ClientKafka,
   ) {}
 
   @Get()
@@ -17,7 +18,7 @@ export class AppController {
   }
 
   @MessagePattern(KafkaTopics.ORDER_CREATED)
-  async processOrder(@Payload() orderData: CreateOrderDto): Promise<OrderResponseDto> {
+  processOrder(@Payload() orderData: CreateOrderDto): OrderResponseDto {
     this.logger.log(`Order received: ${JSON.stringify(orderData)}`);
     
     // Process the order
@@ -28,17 +29,29 @@ export class AppController {
     console.log("[Order Received]: ", orderData);
     
     this.logger.log(`Order processed: ${orderData.productId}`);
+
+    //simulate processing the order
+    this.kafkaService.emit(KafkaTopics.ORDER_PROCESSED, {
+      message: result.message,
+      data: {
+        productId: result.data.productId,
+        customerId: result.data.customerId,
+        quantity: result.data.quantity,
+      },
+      status: result.status,
+      timestamp: result.timestamp
+    });
     
     // With MessagePattern, this result is sent back to the requesting service
     return result;
   }
 
-  @EventPattern(KafkaTopics.ORDER_CREATED)
-  async processOrderEvent(@Payload() orderData: CreateOrderDto): Promise<OrderResponseDto> {
-    this.logger.log(`Order received: ${JSON.stringify(orderData)}`);
+  // @EventPattern(KafkaTopics.ORDER_CREATED)
+  // async processOrderEvent(@Payload() orderData: CreateOrderDto): Promise<OrderResponseDto> {
+  //   this.logger.log(`Order received: ${JSON.stringify(orderData)}`);
     
-    // Process the order
-    const result = this.appService.processOrder(orderData);
-    return result;
-  }
+  //   // Process the order
+  //   const result = this.appService.processOrder(orderData);
+  //   return result;
+  // }
 }

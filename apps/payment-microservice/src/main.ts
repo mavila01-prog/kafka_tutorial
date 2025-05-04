@@ -14,22 +14,11 @@ async function bootstrap() {
     transport: Transport.KAFKA,
     options: {
       client: {
-        clientId: 'api-gateway',
-        brokers: ['localhost:9094', 'localhost:9095', 'localhost:9097'],
-        ssl: {
-          rejectUnauthorized: true,
-          ca: [process.env.KAFKA_CA_CERT || ''],
-          key: process.env.KAFKA_CLIENT_KEY || '',
-          cert: process.env.KAFKA_CLIENT_CERT || ''
-        },
-        sasl: {
-          mechanism: 'scram-sha-512',
-          username: 'client',
-          password: 'client-secret'
-        }
+        // clientId: 'api-gateway',
+        brokers: ['192.168.18.91:9092', '192.168.18.91:9094', '192.168.18.91:9096'],
       },
       consumer: {
-        groupId: 'api-gateway-consumer',
+        groupId: 'payment-gateway-consumer',
       },
       producer: {
         createPartitioner: Partitioners.DefaultPartitioner,
@@ -37,11 +26,11 @@ async function bootstrap() {
     },
   });
 
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 3002;
 
   await app.listen();
   
-  Logger.log(`🚀 Kafka consumer is listening on localhost:9094 and port ${port}`);
+  Logger.log(`🚀 Payment microservice is listening on kafka1:9092 and port ${port}`);
 }
 
 bootstrap();

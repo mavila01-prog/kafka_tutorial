@@ -15,7 +15,7 @@ import { Partitioners } from 'kafkajs';
         options: {
           client: {
             clientId: 'api-gateway',
-            brokers: ['192.168.0.106:9092', '192.168.0.106:9094', '192.168.0.106:9096'],
+            brokers: ['192.168.18.91:9092', '192.168.18.91:9094', '192.168.18.91:9096'],
           },
           consumer: {
             groupId: 'api-gateway-consumer',
