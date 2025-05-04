@@ -1,8 +1,8 @@
 {
   "name": "@kafka-tutorial/shared",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "../../../dist/libs/shared/src/index.js",
+  "types": "../../../dist/libs/shared/src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "clean": "rimraf dist"

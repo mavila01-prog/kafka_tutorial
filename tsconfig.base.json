@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@kafka-tutorial/shared": ["libs/shared/src"]
+      "@kafka-tutorial/shared": ["dist/libs/shared/src"]
     }
   },
   "exclude": ["node_modules", "tmp"]

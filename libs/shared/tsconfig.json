@@ -5,7 +5,9 @@
     "rootDir": "./src",
     "declaration": true,
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
