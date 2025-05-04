@@ -7,6 +7,7 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { Partitioners } from 'kafkajs';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,{
@@ -14,10 +15,13 @@ async function bootstrap() {
     options: {
       client: {
         clientId: 'api-gateway',
-        brokers: ['kafka1:9092'],
+        brokers: ['192.168.0.106:9092', '192.168.0.106:9094', '192.168.0.106:9096'],
       },
       consumer: {
         groupId: 'api-gateway-consumer',
+      },
+      producer: {
+        createPartitioner: Partitioners.DefaultPartitioner,
       }
     },
   });
