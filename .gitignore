@@ -9,6 +9,10 @@ kafka1/
 kafka2/
 kafka3/
 
+certs/
+client.properties
+kafka-jaas.config
+
 # dependencies
 node_modules
 
