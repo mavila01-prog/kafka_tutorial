@@ -1,31 +1,33 @@
 {
-    "name": "shared",
-    "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "libs/shared/src",
-    "projectType": "library",
-    "targets": {
-      "build": {
-        "executor": "@nx/js:tsc",
-        "outputs": ["{options.outputPath}"],
-        "options": {
-          "outputPath": "dist/libs/shared",
-          "tsConfig": "libs/shared/tsconfig.json",
-          "packageJson": "libs/shared/package.json",
-          "main": "libs/shared/src/index.ts",
-          "assets": [{
+  "name": "shared",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared",
+        "tsConfig": "libs/shared/tsconfig.json",
+        "packageJson": "libs/shared/package.json",
+        "main": "libs/shared/src/index.ts",
+        "assets": [
+          {
             "glob": "**/!(*.ts)",
             "input": "libs/shared/src",
             "output": "src"
-          }]
-        }
-      },
-      "lint": {
-        "executor": "@nx/linter:eslint",
-        "outputs": ["{options.outputFile}"],
-        "options": {
-          "lintFilePatterns": ["libs/shared/**/*.ts"]
-        }
+          }
+        ]
       }
     },
-    "tags": []
-  } 
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/shared/**/*.ts"],
+        "config": "libs/shared/eslint.config.mjs"
+      }
+    }
+  },
+  "tags": []
+}
