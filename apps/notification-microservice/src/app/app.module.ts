@@ -5,8 +5,7 @@ import { SharedModule } from '@kafka-tutorial/shared';
 import { ConfigModule, ConfigService } from '@kafka-tutorial/config';
 
 @Module({
-  imports: [SharedModule,
-    ConfigModule,],
+  imports: [SharedModule, ConfigModule],
   controllers: [AppController],
   providers: [AppService],
 })

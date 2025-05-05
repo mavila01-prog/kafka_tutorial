@@ -8,7 +8,10 @@
     "start": "nx run-many --target=serve --all",
     "start:api": "nx serve api-gateway",
     "start:orders": "nx serve order-microservice",
-    "start:dev": "nx run-many --target=serve --all --watch"
+    "start:dev": "nx run-many --target=serve --all --watch",
+    "lint": "nx lint",
+    "format": "nx format:write",
+    "format:check": "nx format:check"
   },
   "private": true,
   "workspaces": [
