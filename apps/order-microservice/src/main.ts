@@ -8,28 +8,22 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Partitioners } from 'kafkajs';
+import { ConfigService } from '@kafka-tutorial/config';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,{
+  const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+  const serviceName = 'order';
+
+  app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
       client: {
-        clientId: 'api-gateway',
-        brokers: ['localhost:9094', 'localhost:9095', 'localhost:9097'],
-        ssl: {
-          rejectUnauthorized: true,
-          ca: [process.env.KAFKA_CA_CERT || ''],
-          key: process.env.KAFKA_CLIENT_KEY || '',
-          cert: process.env.KAFKA_CLIENT_CERT || ''
-        },
-        sasl: {
-          mechanism: 'scram-sha-512',
-          username: 'client',
-          password: 'client-secret'
-        }
+        clientId: configService.getServiceName(serviceName),
+        brokers: configService.getKafkaBrokers(),
       },
       consumer: {
-        groupId: 'api-gateway-consumer',
+        groupId: configService.getConsumerGroup(serviceName),
       },
       producer: {
         createPartitioner: Partitioners.DefaultPartitioner,
@@ -37,11 +31,12 @@ async function bootstrap() {
     },
   });
 
-  const port = process.env.PORT || 3001;
-
-  await app.listen();
+  const port = configService.getServicePort(serviceName);
+  await app.startAllMicroservices();
+  await app.listen(port);
   
-  Logger.log(`🚀 Kafka consumer is listening on localhost:9094 and port ${port}`);
+  Logger.log(`🚀 ${configService.getServiceName(serviceName)} is running on port ${port}`);
+  Logger.log(`📡 Kafka consumer is connected to brokers: ${configService.getKafkaBrokers().join(', ')}`);
 }
 
 bootstrap();

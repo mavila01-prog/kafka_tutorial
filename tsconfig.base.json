@@ -9,13 +9,14 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "module": "commonjs",
+    "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@kafka-tutorial/shared": ["dist/libs/shared/src"]
+      "@kafka-tutorial/config": ["libs/config/src/index.ts"],
+      "@kafka-tutorial/shared": ["libs/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

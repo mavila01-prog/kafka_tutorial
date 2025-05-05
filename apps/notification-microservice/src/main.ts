@@ -8,16 +8,22 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Partitioners } from 'kafkajs';
+import { ConfigService } from '@kafka-tutorial/config';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule,{
+  const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+  const serviceName = 'notification';
+
+  app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
       client: {
-        brokers: ['192.168.18.91:9092', '192.168.18.91:9094', '192.168.18.91:9096'],
+        clientId: configService.getServiceName(serviceName),
+        brokers: configService.getKafkaBrokers(),
       },
       consumer: {
-        groupId: 'notification-consumer-group',
+        groupId: configService.getConsumerGroup(serviceName),
       },
       producer: {
         createPartitioner: Partitioners.DefaultPartitioner,
@@ -25,11 +31,12 @@ async function bootstrap() {
     },
   });
 
-  const port = process.env.PORT || 3001;
-
-  await app.listen();
+  const port = configService.getServicePort(serviceName);
+  await app.startAllMicroservices();
+  await app.listen(port);
   
-  Logger.log(`🚀 Kafka consumer is listening on kafka1:9092 and port ${port}`);
+  Logger.log(`🚀 ${configService.getServiceName(serviceName)} is running on port ${port}`);
+  Logger.log(`📡 Kafka consumer is connected to brokers: ${configService.getKafkaBrokers().join(', ')}`);
 }
 
 bootstrap();
