@@ -13,19 +13,14 @@ export class AppController {
   }
 
   @MessagePattern(KafkaTopics.ORDER_PROCESSED)
-  async processOrder(@Payload() orderData: OrderResponseDto) {
-    console.log("[Payment Service]: Payment in process:", {
-      message: orderData.message,
-      // productId: orderData.data.productId,
-      status: orderData.status,
-      timestamp: orderData.timestamp
-    });
+  async processOrder(@Payload() orderData: OrderResponseDto): Promise<OrderResponseDto> {
+    const data = this.appService.proccessOrder(orderData);
     this.kafkaService.emit(KafkaTopics.PAYMENT_SUCCEED, {
       message: orderData.message,
       data: orderData.data,
       status: orderData.status,
       timestamp: orderData.timestamp
     });
-    // return this.appService.processOrder(orderData);
+    return data;
   }
 }
