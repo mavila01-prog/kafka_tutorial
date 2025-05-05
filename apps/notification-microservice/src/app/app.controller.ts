@@ -14,11 +14,19 @@ export class AppController {
 
   @MessagePattern(KafkaTopics.ORDER_CREATED)
   sendOrderCreatedNotification(@Payload() data: CreateOrderDto) {
-    console.log("[Notification Service]: Sending Order Email Notification:", data);
+    console.log(
+      '[Notification Service]: Sending Order Email Notification:',
+      data
+    );
+    return data;
   }
 
   @MessagePattern(KafkaTopics.PAYMENT_SUCCEED)
   sendPaymentSucceedNotification(@Payload() data: CreateOrderDto) {
-    console.log("[Notification Service]: Sending Payment Succeed Email Notification:", data);
+    console.log(
+      '[Notification Service]: Sending Payment Succeed Email Notification:',
+      data
+    );
+    return data;
   }
 }

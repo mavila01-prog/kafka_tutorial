@@ -27,16 +27,20 @@ async function bootstrap() {
       },
       producer: {
         createPartitioner: Partitioners.DefaultPartitioner,
-      }
+      },
     },
   });
 
   const port = configService.getServicePort(serviceName);
   await app.startAllMicroservices();
   await app.listen(port);
-  
-  Logger.log(`🚀 ${configService.getServiceName(serviceName)} is running on port ${port}`);
-  Logger.log(`📡 Kafka consumer is connected to brokers: ${configService.getKafkaBrokers().join(', ')}`);
+
+  Logger.log(
+    `🚀 ${configService.getServiceName(serviceName)} is running on port ${port}`
+  );
+  Logger.log(
+    `📡 Kafka consumer is connected to brokers: ${configService.getKafkaBrokers().join(', ')}`
+  );
 }
 
 bootstrap();
