@@ -1,4 +1,4 @@
-import { KafkaTopics, OrderResponseDto } from '@kafka-tutorial/shared';
+import { OrderResponseDto } from '@kafka-tutorial/shared';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
